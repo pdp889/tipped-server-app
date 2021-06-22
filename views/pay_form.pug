@@ -1,34 +1,46 @@
 extends layout
 
 block content
-  h1= title
+  if currentUser
+    h1= title
 
-  form(method='POST' action='')
-    div.form-group
-      label(for='hourly_pay') Hourly:
-      input#hourly_pay.form-control(type='number', placeholder='2.13' name='hourly_pay' required='true' value=(undefined===pay ? '' : pay.hourly_pay) )
-      label(for='weekly_tips') Weekly Tips:
-      input#weekly_tips.form-control(type='number', placeholder='500' name='weekly_tips' required='true' value=(undefined===pay ? '' : pay.weekly_tips) )
-      label(for='weekly_hours') Weekly Hours:
-      input#weekly_hours.form-control(type='number', placeholder='40' name='weekly_hours' required='true' value=(undefined===pay ? '' : pay.weekly_hours) )
-    div.form-group
-      label(for='restaurant') Restaurant:
-      select#restaurant.form-control(type='select', placeholder='select restaurant' name='restaurant' required='true' )
-        - restaurants.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-        for restaurant in restaurants 
-          if pay
-            option(
-              value=restaurant._id 
-              selected=(
-                restaurant._id.toString()==pay.restaurant._id
-                || restaurant._id.toString()==pay.resturant 
-              ) ? 'selected' : false 
-            ) #{restaurant.name}
-          else
-            option(value=restaurant._id) #{restaurant.name}
-    button.btn.btn-primary(type='submit') Submit
+    form(method='POST' action='')
+      div.form-group
+        label(for='hourly_pay') Hourly:
+        input#hourly_pay.form-control(type='number', placeholder='2.13' name='hourly_pay' required='true' value=(undefined===pay ? '' : pay.hourly_pay) )
+        label(for='weekly_tips') Weekly Tips:
+        input#weekly_tips.form-control(type='number', placeholder='500' name='weekly_tips' required='true' value=(undefined===pay ? '' : pay.weekly_tips) )
+        label(for='weekly_hours') Weekly Hours:
+        input#weekly_hours.form-control(type='number', placeholder='40' name='weekly_hours' required='true' value=(undefined===pay ? '' : pay.weekly_hours) )
+      div.form-group
+        label(for='restaurant') Restaurant:
+        select#restaurant.form-control(type='select', placeholder='select restaurant' name='restaurant' required='true' )
+          - restaurants.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+          for restaurant in restaurants 
+            if pay
+              option(
+                value=restaurant._id 
+                selected=(
+                  restaurant._id.toString()==pay.restaurant._id
+                  || restaurant._id.toString()==pay.resturant 
+                ) ? 'selected' : false 
+              ) #{restaurant.name}
+            else
+              option(value=restaurant._id) #{restaurant.name}
+      button.btn.btn-primary(type='submit') Submit
 
-  if errors
-    ul
-      for error in errors
-        li!= error.msg
+    if errors
+      ul
+        for error in errors
+          li!= error.msg
+  else 
+    h1 Log In
+    a(href="/signup") SIGN UP
+    form(action="/login" method="POST")
+        div.form-group
+            label(for='username') Username 
+            input#username.form-control(type='text', placeholder='admin123' name='username' required='true')
+            label(for='password') Password :
+            input#password.form-control(type='password', name='password' required='true')
+        div.form-group
+        button.btn.btn-primary(type='submit') OK   
