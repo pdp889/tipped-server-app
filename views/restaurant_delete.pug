@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1 #{title}: #{restaurant.name}
+
+  if restaurant_pays.length
+
+    p #[strong Delete the following pay records before attempting to delete this restaurant.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Pay records
+
+      dl
+      each pay in restaurant_pays
+        dt
+          a(href=pay.url) #{pay.id}
+        dd 
+
+  else
+    p Do you really want to delete this Restaurant ?
+
+    form(method='POST' action='')
+      div.form-group
+        input#restaurantid.form-control(type='hidden',name='restaurantid', required='true', value=restaurant._id )
+
+      button.btn.btn-primary(type='submit') Delete

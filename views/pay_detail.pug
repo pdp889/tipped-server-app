@@ -1,0 +1,17 @@
+extends layout
+
+block content
+
+  h1 Pay id: #{pay.id}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    p  Hourly :  #{pay.hourly_pay}
+    p  Weekly Tips: #{pay.weekly_tips}
+    p  Weekly Hours: #{pay.weekly_hours}
+    p  Restaurant: #{pay.restaurant}
+  hr
+  p
+    a(href=pay.url+'/delete') Delete pay
+  p
+    a(href=pay.url+'/update') Update pay

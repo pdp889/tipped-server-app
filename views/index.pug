@@ -1,0 +1,42 @@
+extends layout
+
+block content
+
+  
+
+  if user 
+    h1= title
+    p Welcome to Backend of the Server-App, !{user.username}
+    a(href='/signout') SIGN OUT
+
+    div(class='container-fluid')
+      div(class='row')
+        div(class='col-sm-2')
+          block sidebar
+            ul(class='sidebar-nav')
+              li
+                a(href='/database/pay') All Pays
+              li
+                a(href='/database/restaurant') All Restaurants
+
+              li
+                hr
+              li
+                a(href='/database/pay/create') Create new pay
+              li
+                a(href='/database/restaurant/create') Create new restaurant
+
+    if error
+      p Error getting dynamic content;
+
+  else 
+    h1 Log In
+    a(href="/signup") SIGN UP
+    form(action="/login" method="POST")
+        div.form-group
+            label(for='username') Username 
+            input#username.form-control(type='text', placeholder='admin123' name='username' required='true')
+            label(for='password') Password :
+            input#password.form-control(type='password', name='password' required='true')
+        div.form-group
+        button.btn.btn-primary(type='submit') OK

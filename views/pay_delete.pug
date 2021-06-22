@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 #{title}: #{pay.id}
+
+  p Do you really want to delete this Pay record ?
+
+  form(method='POST' action='')
+    div.form-group
+      input#payid.form-control(type='hidden',name='payid', required='true', value=pay._id )
+    button.btn.btn-primary(type='submit') Delete

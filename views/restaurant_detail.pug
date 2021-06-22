@@ -1,0 +1,17 @@
+extends layout
+
+block content
+
+  h1 Restaurant: #{restaurant.id}
+
+  div(style='margin-left:20px;margin-top:20px')
+
+    p Name: #{restaurant.name}
+    p Zip: #{restaurant.zip_code}
+    p Entree Price: #{restaurant.entree_price}
+
+  hr
+  p
+    a(href=restaurant.url+'/delete') Delete restaurant
+  p
+    a(href=restaurant.url+'/update') Update restaurant
