@@ -189,16 +189,13 @@ exports.top_five_zips = function (req,res, next) {
     })
     let cleanArray = [];
     zipObjectArray.forEach(item => {
-        let comp = item["runningComp"];
-        if(comp == null || comp == undefined){
-            comp = 0;
-        }
-        if (stubCount < 1){
-            stubCount = 1;
+        let average = Math.round((100*item["runningComp"])/(item["count"]))/100;
+        if (!average){
+            average = 0.01;
         }
         let object = {
             "zip": item["zip"],
-            "average": Math.round((100*comp)/(item["count"]))/100
+            "average": average
         }
         cleanArray.push(object);
     })
@@ -252,21 +249,18 @@ exports.pay_by_entree = function (req,res, next) {
             
         })
         payStubArray.forEach(item => {
-            let comp = item["average hourly"];
-            if(comp == null || comp == undefined){
-                comp = 0;
-            }
-            runningTotal += comp;
+            runningTotal += item["average hourly"];
             stubCount += 1;
         })
-        if (stubCount < 1){
-            stubCount = 1;
+        let average = Math.round(100*(runningTotal/stubCount))/100;
+        if (!average){
+            average = 0.01;
         }
         let object = {
             "entree_price" : req.params.rating,
             "running_total": runningTotal,
             "stub_count": stubCount,
-            "average": Math.round(100*(runningTotal/stubCount))/100
+            "average": average
         }
         return res.json(object);
     })
@@ -318,23 +312,35 @@ exports.all_pay_by_entree = function (req,res, next) {
 
             let index = item["entree_price"] - 1;
             if (entreeObjectArray[index] == null){
+                let average = item["average hourly"]
+                if (!average){
+                    average = 0.01;
+                }
                 let object = {
                     "entree_price": item["entree_price"],
-                    "runningComp" : item["average hourly"],
+                    "runningComp" : average,
                     "count": 1,
                 }
                 entreeObjectArray[index] = object;
             } else {
-                entreeObjectArray[index]["runningComp"] += item["average hourly"];
+                let average = item["average hourly"]
+                if (!average){
+                    average = 0.01;
+                }
+                entreeObjectArray[index]["runningComp"] += average;
                 entreeObjectArray[index]["count"] += 1;
             }
             
         })
         let finalArray = [];
          entreeObjectArray.forEach(item => {
+            let average = Math.round((100*item["runningComp"])/(item["count"]))/100
+            if (!average){
+                average = 0.01;
+            }
             let object = {
                 "entree_price": item["entree_price"],
-                "average": Math.round((100*item["runningComp"])/(item["count"]))/100
+                "average": average
             }
             finalArray.push(object);
         })
