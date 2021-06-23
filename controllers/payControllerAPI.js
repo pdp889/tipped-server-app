@@ -386,3 +386,56 @@ exports.pay_by_zip_and_entree = function (req,res, next) {
     })
     .catch (err => res.json(err))
 }
+
+exports.pay_create_get = function (req,res,next){
+    Restaurant.find()
+    .then( restaurantsList => {
+        let object = {
+            "title": "Create Pay Record",
+            "restaurants": restaurantsList
+        }
+        return res.json(object);
+    })
+    .catch(err => res.json(err));
+        
+};
+
+exports.pay_create_post = [
+
+    body('hourly_pay', 'must be number').trim().isNumeric().escape(),
+    body('weekly_tips', 'must be number').trim().isNumeric().escape(),
+    body('weekly_hours', 'must be number').trim().isNumeric().escape(),
+    body('restaurant').trim().isLength({min: 1}).escape(),
+
+    (req, res, next) => {
+
+        const errors = validationResult(req);
+
+        let pay = new Pay({
+            hourly_pay: req.body.hourly_pay,
+            weekly_tips: req.body.weekly_tips,
+            weekly_hours: req.body.weekly_hours,
+            restaurant: req.body.restaurant,
+        });
+        if(!errors.isEmpty()){
+            Restaurant.find()
+            .then( restaurantsList => {
+                let object = {
+                    "title": "Create Pay Record",
+                    "restaurants": restaurantsList,
+                    "pay": pay, 
+                    "errors":errors.array() 
+                }
+                return res.json(object);
+            })
+            .catch(err => res.json(err));
+        } else {
+            pay.save(function(err){
+                if (err) { return next(err); }
+                return res.json({"status":"pay added"});
+            });
+        }
+    }
+    
+
+]
