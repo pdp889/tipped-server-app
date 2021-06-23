@@ -193,6 +193,9 @@ exports.top_five_zips = function (req,res, next) {
         if(comp == null || comp == undefined){
             comp = 0;
         }
+        if (stubCount < 1){
+            stubCount = 1;
+        }
         let object = {
             "zip": item["zip"],
             "average": Math.round((100*comp)/(item["count"]))/100
@@ -256,6 +259,9 @@ exports.pay_by_entree = function (req,res, next) {
             runningTotal += comp;
             stubCount += 1;
         })
+        if (stubCount < 1){
+            stubCount = 1;
+        }
         let object = {
             "entree_price" : req.params.rating,
             "running_total": runningTotal,
