@@ -10,7 +10,7 @@ exports.restaurant_list = function (req,res,next) {
 };
 
 exports.restaurant_create_get = function (req,res,next){
-    return res.json('restaurant_form', { title: 'Create Restaurant'});
+    return res.json({ title: 'Create Restaurant'});
 }
 
 exports.restaurant_create_post = [
