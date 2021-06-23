@@ -187,12 +187,15 @@ exports.top_five_zips = function (req,res, next) {
         }
         
     })
-
     let cleanArray = [];
     zipObjectArray.forEach(item => {
+        let comp = item["runningComp"];
+        if(comp == null || comp == undefined){
+            comp = 0;
+        }
         let object = {
             "zip": item["zip"],
-            "average": Math.round((100*item["runningComp"])/(item["count"]))/100
+            "average": Math.round((100*comp)/(item["count"]))/100
         }
         cleanArray.push(object);
     })
@@ -246,7 +249,11 @@ exports.pay_by_entree = function (req,res, next) {
             
         })
         payStubArray.forEach(item => {
-            runningTotal += item["average hourly"];
+            let comp = item["average hourly"];
+            if(comp == null || comp == undefined){
+                comp = 0;
+            }
+            runningTotal += comp;
             stubCount += 1;
         })
         let object = {
