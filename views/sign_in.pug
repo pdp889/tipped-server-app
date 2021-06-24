@@ -1,0 +1,16 @@
+extends layout
+block content
+    div.text-center
+        form( method="POST" action="")
+            #error
+                if error
+                    p.text-danger Error!!!
+
+            h1(class=h1Classes) Please sign in
+
+            label( for="username" ) Username
+            input(type="text" name="username" id="username" placeholder="username" required)
+
+            label(for="inputPassword" class="sr-only") Password
+            input(type="password" name="password" id="password" placeholder="Password" required)
+            button Sign in

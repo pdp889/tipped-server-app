@@ -1,13 +1,17 @@
 extends layout
 
 block content
+  if currentUser
+    h1 #{title}: #{pay.id}
 
-  h1 #{title}: #{pay.id}
+    p Do you really want to delete this Pay record ?
 
-  p Do you really want to delete this Pay record ?
-
-  form(method='POST' action='')
-    div.form-group
-      input#payid.form-control(type='hidden',name='payid', required='true', value=pay._id )
-    button.btn.btn-primary(type='submit') Delete
+    form(method='POST' action='')
+      div.form-group
+        input#payid.form-control(type='hidden',name='payid', required='true', value=pay._id )
+      button.btn.btn-primary(type='submit') Delete
+  else
+    a(href='/auth/login') Login 
+    a(href='auth/signup') Sign Up
+    
  

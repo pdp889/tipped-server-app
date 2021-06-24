@@ -1,17 +1,20 @@
 extends layout
 
 block content
+  if currentUser
+    h1 Restaurant: #{restaurant.id}
 
-  h1 Restaurant: #{restaurant.id}
+    div(style='margin-left:20px;margin-top:20px')
 
-  div(style='margin-left:20px;margin-top:20px')
+      p Name: #{restaurant.name}
+      p Zip: #{restaurant.zip_code}
+      p Entree Price: #{restaurant.entree_price}
 
-    p Name: #{restaurant.name}
-    p Zip: #{restaurant.zip_code}
-    p Entree Price: #{restaurant.entree_price}
-
-  hr
-  p
-    a(href=restaurant.url+'/delete') Delete restaurant
-  p
-    a(href=restaurant.url+'/update') Update restaurant
+    hr
+    p
+      a(href=restaurant.url+'/delete') Delete restaurant
+    p
+      a(href=restaurant.url+'/update') Update restaurant
+  else
+    a(href='/auth/login') Login 
+    a(href='auth/signup') Sign Up

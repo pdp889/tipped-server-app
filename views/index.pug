@@ -1,23 +1,28 @@
 extends layout
 
 block content
+  if currentUser
+    h1 Welcome back #{currentUser.username}
+    a(href='/auth/log-out') log out
 
-  div(class='container-fluid')
-    div(class='row')
-      div(class='col-sm-2')
-        block sidebar
-          ul(class='sidebar-nav')
-            li
-              a(href='/database/pay') All Pays
-            li
-              a(href='/database/restaurant') All Restaurants
+    div(class='container-fluid')
+      div(class='row')
+        div(class='col-sm-2')
+          block sidebar
+            ul(class='sidebar-nav')
+              li
+                a(href='/database/pay') All Pays
+              li
+                a(href='/database/restaurant') All Restaurants
 
-            li
-              hr
-            li
-              a(href='/database/pay/create') Create new pay
-            li
-              a(href='/database/restaurant/create') Create new restaurant
-
-    if error
-      p Error getting dynamic content;
+              li
+                hr
+              li
+                a(href='/database/pay/create') Create new pay
+              li
+                a(href='/database/restaurant/create') Create new restaurant
+  else
+    a(href='/auth/login') Login 
+    a(href='auth/signup') Sign Up
+  if error
+    p Error getting dynamic content;

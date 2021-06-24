@@ -8,11 +8,13 @@ const session = require("express-session");
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var cors = require('cors');
+const passport = require("passport");
 
 
 var indexRouter = require('./routes/index');
 let databaseRouter = require('./routes/database');
-let apiRouter = require('./routes/api')
+let apiRouter = require('./routes/api');
+let authRouter = require('./routes/auth');
 
 
 var app = express()
@@ -33,9 +35,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+//for passport on server
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
+
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/database', databaseRouter);
 app.use('/api', apiRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
