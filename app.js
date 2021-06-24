@@ -7,12 +7,14 @@ var logger = require('morgan');
 const session = require("express-session");
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+var cors = require('cors');
+
 
 var indexRouter = require('./routes/index');
 let databaseRouter = require('./routes/database');
 let apiRouter = require('./routes/api')
 
-var cors = require('cors')
+
 var app = express()
 app.use(cors())
 

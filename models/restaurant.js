@@ -10,13 +10,6 @@ let RestaurantSchema = new Schema(
     }
 );
 
-//Virtual for restaurant info
-RestaurantSchema
-.virtual('restaurant_info')
-.get(function () {
-    return 'name: ' + this.name + "; zip: " + this.zip_code + "; entree: " + this.entree_price;
-});
-
 //Virtual for restaurant url
 RestaurantSchema
 .virtual('url')

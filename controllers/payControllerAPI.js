@@ -1,9 +1,15 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const jwt = require('jsonwebtoken');
 let Pay = require('../models/pay');
 let Restaurant = require('../models/restaurant');
+let User = require('../models/user');
 const { body,validationResult } = require('express-validator');
 let async =require('async');
+const passport = require('passport');
+require('../passport.js');
 
-exports.pay_by_zip = function (req,res, next) {
+exports.pay_by_zip = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -58,7 +64,7 @@ exports.pay_by_zip = function (req,res, next) {
     .catch (err => res.json(err))
 }
 
-exports.all_pay_by_zip = function (req,res, next) {
+exports.all_pay_by_zip = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -130,7 +136,7 @@ exports.all_pay_by_zip = function (req,res, next) {
     .catch (err => res.json(err))
 }
 
-exports.top_five_zips = function (req,res, next) {
+exports.top_five_zips = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     Restaurant.aggregate([{
     $lookup:
         {
@@ -208,7 +214,7 @@ exports.top_five_zips = function (req,res, next) {
 .catch (err => res.json(err))
 }
 
-exports.pay_by_entree = function (req,res, next) {
+exports.pay_by_entree = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -267,7 +273,7 @@ exports.pay_by_entree = function (req,res, next) {
     .catch (err => res.json(err))
 }
 
-exports.all_pay_by_entree = function (req,res, next) {
+exports.all_pay_by_entree = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -350,7 +356,7 @@ exports.all_pay_by_entree = function (req,res, next) {
     .catch (err => res.json(err))
 }
 
-exports.pay_by_zip_and_entree = function (req,res, next) {
+exports.pay_by_zip_and_entree = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -406,7 +412,7 @@ exports.pay_by_zip_and_entree = function (req,res, next) {
     .catch (err => res.json(err))
 }
 
-exports.pay_create_get = function (req,res,next){
+exports.pay_create_get = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     Restaurant.find()
     .then( restaurantsList => {
         let object = {
@@ -417,44 +423,34 @@ exports.pay_create_get = function (req,res,next){
     })
     .catch(err => res.json(err));
         
-};
+}
 
-exports.pay_create_post = [
+exports.pay_create_post = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+        
+    const errors = validationResult(req);
 
-    body('hourly_pay', 'must be number').trim().isNumeric().escape(),
-    body('weekly_tips', 'must be number').trim().isNumeric().escape(),
-    body('weekly_hours', 'must be number').trim().isNumeric().escape(),
-    body('restaurant').trim().isLength({min: 1}).escape(),
-
-    (req, res, next) => {
-
-        const errors = validationResult(req);
-
-        let pay = new Pay({
-            hourly_pay: req.body.hourly_pay,
-            weekly_tips: req.body.weekly_tips,
-            weekly_hours: req.body.weekly_hours,
-            restaurant: req.body.restaurant,
+    let pay = new Pay({
+        hourly_pay: req.body.hourly_pay,
+        weekly_tips: req.body.weekly_tips,
+        weekly_hours: req.body.weekly_hours,
+        restaurant: req.body.restaurant,
+    });
+    if(!errors.isEmpty()){
+        Restaurant.find()
+        .then( restaurantsList => {
+            let object = {
+                "title": "Create Pay Record",
+                "restaurants": restaurantsList,
+                "pay": pay, 
+                "errors":errors.array() 
+            }
+            return res.json(object);
+        })
+        .catch(err => res.json(err));
+    } else {
+        pay.save(function(err){
+            if (err) { return next(err); }
+            return res.json({"status":"pay added"});
         });
-        if(!errors.isEmpty()){
-            Restaurant.find()
-            .then( restaurantsList => {
-                let object = {
-                    "title": "Create Pay Record",
-                    "restaurants": restaurantsList,
-                    "pay": pay, 
-                    "errors":errors.array() 
-                }
-                return res.json(object);
-            })
-            .catch(err => res.json(err));
-        } else {
-            pay.save(function(err){
-                if (err) { return next(err); }
-                return res.json({"status":"pay added"});
-            });
-        }
     }
-    
-
-]
+}

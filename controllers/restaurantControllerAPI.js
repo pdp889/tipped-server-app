@@ -1,24 +1,25 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const jwt = require('jsonwebtoken');
 let Pay = require('../models/pay');
 let Restaurant = require('../models/restaurant');
+let User = require('../models/user');
 const { body,validationResult } = require('express-validator');
 let async =require('async');
+const passport = require('passport');
+require('../passport.js');
 
-exports.restaurant_list = function (req,res,next) {
+exports.restaurant_list = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     Restaurant.find()
     .then(list => res.json(list))
     .catch (err => res.json(err))
 };
 
-exports.restaurant_create_get = function (req,res,next){
+exports.restaurant_create_get = passport.authenticate('jwt',{session: false}), (req,res, next) => {
     return res.json({ title: 'Create Restaurant'});
 }
 
-exports.restaurant_create_post = [
-    body('zip_code').trim().isLength({min:5, max:5}).escape().withMessage('Zip code must have exactly 5 characters'),
-    body('name').trim().isLength({min:1}).escape().withMessage('Name must be specified'),
-    body('entree_price').isNumeric().trim().escape().withMessage('Must be a number'),
-
-    (req,res,next) => {
+exports.restaurant_create_post = passport.authenticate('jwt',{session: false}), (req,res, next) => {
         const errors = validationResult(req);
 
         let restaurant = new Restaurant({
@@ -38,4 +39,3 @@ exports.restaurant_create_post = [
             });
         }
     }
-]
