@@ -9,7 +9,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const passportJWT = require("passport-jwt");
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 
 var indexRouter = require('./routes/index');
 let databaseRouter = require('./routes/database');
@@ -84,8 +88,7 @@ app.use(function(req, res, next) {
 });
 app.use(express.urlencoded({ extended: false }));
 
-app.post(
-  "/login",
+app.post("/login",
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/"
@@ -99,14 +102,47 @@ app.get("/", (req, res) => {
   res.render("index", { user: req.user });
 });
 // changes
-app.use('/APIlogin', (req, res) => {
-  res.send({
-    token: 'test123'
-  });
+passport.use(new JWTStrategy({
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey : 'your_jwt_secret'
+},
+
+function (jwtPayload, cb) {
+
+  //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+  return UserModel.findOneById(jwtPayload.id)
+      .then(user => {
+          return cb(null, user);
+      })
+      .catch(err => {
+          return cb(err);
+      });
+}
+));
+
+app.post('/APIlogin', (req, res) => {
+  passport.authenticate('local', {session: false}, (err, user, info) => {
+    if (err || !user) {
+        return res.status(400).json({
+            message: 'Something is not right',
+            user : user
+        });
+    }
+    req.login(user, {session: false}, (err) => {
+      if (err) {
+          res.send(err);
+      }
+
+  // generate a signed son web token with the contents of user object and return it in the response
+
+  const token = jwt.sign(user, 'your_jwt_secret');
+        return res.json({user, token});
+    });
+  })(req, res);
 }); 
 // changes end
 app.use('/database', databaseRouter);
-app.use('/api', apiRouter)
+app.use('/api', passport.authenticate('jwt', {session: false}), apiRouter)
 
 const User = mongoose.model(
   "User",
