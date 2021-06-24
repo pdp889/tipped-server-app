@@ -6,6 +6,8 @@ block content
 
     form(method='POST' action='')
       div.form-group
+      label(for='user') User:
+        input#user.form-control(type='text', placeholder='user' name='user' required='true' value=currentUser._id readonly)
         label(for='hourly_pay') Hourly:
         input#hourly_pay.form-control(type='number', placeholder='2.13' name='hourly_pay' required='true' value=(undefined===pay ? '' : pay.hourly_pay) )
         label(for='weekly_tips') Weekly Tips:

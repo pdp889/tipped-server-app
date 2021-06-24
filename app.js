@@ -98,7 +98,13 @@ app.get("/signout", (req, res) => {
 app.get("/", (req, res) => {
   res.render("index", { user: req.user });
 });
-
+// changes
+app.use('/APIlogin', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+}); 
+// changes end
 app.use('/database', databaseRouter);
 app.use('/api', apiRouter)
 
@@ -128,8 +134,7 @@ app.post('/signup', (req, res, next) => {
       }
       res.redirect("/");
     });
-  })
-  
+  }) 
 });
 
 // catch 404 and forward to error handler

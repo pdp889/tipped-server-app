@@ -61,6 +61,7 @@ exports.pay_create_post = [
     body('weekly_tips', 'must be number').trim().isNumeric().escape(),
     body('weekly_hours', 'must be number').trim().isNumeric().escape(),
     body('restaurant').trim().isLength({min: 1}).escape(),
+    body('user').trim().escape(),
 
     (req, res, next) => {
 
@@ -71,6 +72,7 @@ exports.pay_create_post = [
             weekly_tips: req.body.weekly_tips,
             weekly_hours: req.body.weekly_hours,
             restaurant: req.body.restaurant,
+            user: req.body.user
         });
         if(!errors.isEmpty()){
             async.parallel({
