@@ -9,7 +9,7 @@ let User = require('../models/user');
 const { body,validationResult } = require('express-validator');
 let async =require('async');
 const passport = require('passport');
-require('../passport.js');
+require('../passportAPI.js');
 
 let restaurantAPI_controller = require('../controllers/restaurantControllerAPI');
 let payAPI_controller = require('../controllers/payControllerAPI');
