@@ -9,7 +9,7 @@ let async =require('async');
 const passport = require('passport');
 require('../passport.js');
 
-exports.pay_by_zip = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.pay_by_zip = (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -64,7 +64,7 @@ exports.pay_by_zip = passport.authenticate('jwt',{session: false}), (req,res, ne
     .catch (err => res.json(err))
 }
 
-exports.all_pay_by_zip = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.all_pay_by_zip = (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -136,7 +136,7 @@ exports.all_pay_by_zip = passport.authenticate('jwt',{session: false}), (req,res
     .catch (err => res.json(err))
 }
 
-exports.top_five_zips = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.top_five_zips = (req,res, next) => {
     Restaurant.aggregate([{
     $lookup:
         {
@@ -214,7 +214,7 @@ exports.top_five_zips = passport.authenticate('jwt',{session: false}), (req,res,
 .catch (err => res.json(err))
 }
 
-exports.pay_by_entree = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.pay_by_entree =(req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -273,7 +273,7 @@ exports.pay_by_entree = passport.authenticate('jwt',{session: false}), (req,res,
     .catch (err => res.json(err))
 }
 
-exports.all_pay_by_entree = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.all_pay_by_entree =  (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -356,7 +356,7 @@ exports.all_pay_by_entree = passport.authenticate('jwt',{session: false}), (req,
     .catch (err => res.json(err))
 }
 
-exports.pay_by_zip_and_entree = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.pay_by_zip_and_entree = (req,res, next) => {
     
     Restaurant.aggregate([{
         $lookup:
@@ -412,7 +412,7 @@ exports.pay_by_zip_and_entree = passport.authenticate('jwt',{session: false}), (
     .catch (err => res.json(err))
 }
 
-exports.pay_create_get = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.pay_create_get = (req,res, next) => {
     Restaurant.find()
     .then( restaurantsList => {
         let object = {
@@ -425,7 +425,7 @@ exports.pay_create_get = passport.authenticate('jwt',{session: false}), (req,res
         
 }
 
-exports.pay_create_post = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.pay_create_post = (req,res, next) => {
         
     const errors = validationResult(req);
 

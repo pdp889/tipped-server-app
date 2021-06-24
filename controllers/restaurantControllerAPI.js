@@ -9,17 +9,17 @@ let async =require('async');
 const passport = require('passport');
 require('../passport.js');
 
-exports.restaurant_list = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.restaurant_list = (req,res, next) => {
     Restaurant.find()
     .then(list => res.json(list))
     .catch (err => res.json(err))
 };
 
-exports.restaurant_create_get = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.restaurant_create_get = (req,res, next) => {
     return res.json({ title: 'Create Restaurant'});
 }
 
-exports.restaurant_create_post = passport.authenticate('jwt',{session: false}), (req,res, next) => {
+exports.restaurant_create_post =(req,res, next) => {
         const errors = validationResult(req);
 
         let restaurant = new Restaurant({
@@ -38,4 +38,4 @@ exports.restaurant_create_post = passport.authenticate('jwt',{session: false}), 
                 return res.json({"status":"restaurant added"});
             });
         }
-    }
+}
