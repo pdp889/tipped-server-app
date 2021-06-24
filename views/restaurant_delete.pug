@@ -1,39 +1,28 @@
 extends layout
 
 block content
-  if currentUser
-    h1 #{title}: #{restaurant.name}
 
-    if restaurant_pays.length
+  h1 #{title}: #{restaurant.name}
 
-      p #[strong Delete the following pay records before attempting to delete this restaurant.]
+  if restaurant_pays.length
 
-      div(style='margin-left:20px;margin-top:20px')
+    p #[strong Delete the following pay records before attempting to delete this restaurant.]
 
-        h4 Pay records
+    div(style='margin-left:20px;margin-top:20px')
 
-        dl
-        each pay in restaurant_pays
-          dt
-            a(href=pay.url) #{pay.id}
-          dd 
+      h4 Pay records
 
-    else
-      p Do you really want to delete this Restaurant ?
+      dl
+      each pay in restaurant_pays
+        dt
+          a(href=pay.url) #{pay.id}
+        dd 
 
-      form(method='POST' action='')
-        div.form-group
-          input#restaurantid.form-control(type='hidden',name='restaurantid', required='true', value=restaurant._id )
+  else
+    p Do you really want to delete this Restaurant ?
 
-        button.btn.btn-primary(type='submit') Delete
-  else 
-    h1 Log In
-    a(href="/signup") SIGN UP
-    form(action="/login" method="POST")
-        div.form-group
-            label(for='username') Username 
-            input#username.form-control(type='text', placeholder='admin123' name='username' required='true')
-            label(for='password') Password :
-            input#password.form-control(type='password', name='password' required='true')
-        div.form-group
-        button.btn.btn-primary(type='submit') OK   
+    form(method='POST' action='')
+      div.form-group
+        input#restaurantid.form-control(type='hidden',name='restaurantid', required='true', value=restaurant._id )
+
+      button.btn.btn-primary(type='submit') Delete

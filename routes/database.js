@@ -5,7 +5,6 @@ let restaurant_controller = require('../controllers/restaurantController');
 let pay_controller = require('../controllers/payController');
 
 // Pay Routes //
-router.get('/', pay_controller.index);
 router.get('/pay/create', pay_controller.pay_create_get);
 router.post('/pay/create', pay_controller.pay_create_post);
 router.get('/pay/:id/delete', pay_controller.pay_delete_get);

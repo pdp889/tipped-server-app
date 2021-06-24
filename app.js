@@ -5,15 +5,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require("express-session");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const passportJWT = require("passport-jwt");
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
 
 var indexRouter = require('./routes/index');
 let databaseRouter = require('./routes/database');
@@ -38,140 +31,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
-
-
-passport.use(
-  new LocalStrategy((username, password, done) => {
-    
-    User.findOne({ username: username }, (err, user) => {
-      if (err) { 
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false, { message: "Incorrect username" });
-      }
-      if (bcrypt.compare(password, user.password, (err, res) => {
-        if (err) { 
-          return done(err);
-        }
-        if (res) {
-          // passwords match! log user in
-          return done(null, user)
-        } else {
-          // passwords do not match!
-          return done(null, false, { message: "Incorrect password" })
-        }
-      })) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-      return done(null, user);
-    });
-  })
-);
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(function(req, res, next) {
-  res.locals.currentUser = req.user;
-  next();
-});
-app.use(express.urlencoded({ extended: false }));
-
-app.post("/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/"
-  })
-);
-app.get("/signout", (req, res) => {
-  req.logout();
-  res.redirect("/");
-});
-app.get("/", (req, res) => {
-  res.render("index", { user: req.user });
-});
-// changes
-passport.use(new JWTStrategy({
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey : 'your_jwt_secret'
-},
-
-function (jwtPayload, cb) {
-
-  //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-  return UserModel.findOneById(jwtPayload.id)
-      .then(user => {
-          return cb(null, user);
-      })
-      .catch(err => {
-          return cb(err);
-      });
-}
-));
-
-app.post('/APIlogin', (req, res) => {
-  passport.authenticate('local', {session: false}, (err, user, info) => {
-    if (err || !user) {
-        return res.status(400).json({
-            message: 'Something is not right',
-            user : user
-        });
-    }
-    req.login(user, {session: false}, (err) => {
-      if (err) {
-          res.send(err);
-      }
-
-  // generate a signed son web token with the contents of user object and return it in the response
-
-  const token = jwt.sign(user, 'your_jwt_secret');
-        return res.json({user, token});
-    });
-  })(req, res);
-}); 
-// changes end
+app.use('/', indexRouter);
 app.use('/database', databaseRouter);
-app.use('/api', passport.authenticate('jwt', {session: false}), apiRouter)
-
-const User = mongoose.model(
-  "User",
-  new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true }
-  })
-);
-
-app.get('/signup', function(req, res, next) {
-  res.render('sign_up');
-});
-
-app.post('/signup', (req, res, next) => {
-  bcrypt.hash(req.body.password, 10, function(err, hash){
-    if (err) { 
-      return next(err);
-    }
-    const user = new User({
-      username: req.body.username,
-      password: hash
-    }).save(err => {
-      if (err) { 
-        return next(err);
-      }
-      res.redirect("/");
-    });
-  }) 
-});
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

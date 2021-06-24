@@ -1,31 +1,20 @@
 extends layout
 
 block content
-  if currentUser
-    h1=title
 
-    form(method='POST' action='')
-      div.form-group
-        label(for='zip_code') Zip Code :
-        input#zip_code.form-control(type='text' placeholder='00000' name='zip_code' required='true' value=(undefined===restaurant  ? '' : restaurant.zip_code) )
-        label(for='name') Restaurant Name:
-        input#name.form-control(type='text' placeholder='Restaurant Name' name='name' required='true' value=(undefined===restaurant  ? '' : restaurant.name))
-      div.form-group
-        label(for='entree_price') Entree Price (1-5):
-        input#entree_price.form-control(type='number' name='entree_price' min=1 max=5 value=(undefined===restaurant  ? '' : restaurant.entree_price) )
-      button.btn.btn-primary(type='submit') Submit
-    if errors
-      ul
-        for error in errors
-          li!= error.msg
-  else 
-    h1 Log In
-    a(href="/signup") SIGN UP
-    form(action="/login" method="POST")
-        div.form-group
-            label(for='username') Username 
-            input#username.form-control(type='text', placeholder='admin123' name='username' required='true')
-            label(for='password') Password :
-            input#password.form-control(type='password', name='password' required='true')
-        div.form-group
-        button.btn.btn-primary(type='submit') OK   
+  h1=title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='zip_code') Zip Code :
+      input#zip_code.form-control(type='text' placeholder='00000' name='zip_code' required='true' value=(undefined===restaurant  ? '' : restaurant.zip_code) )
+      label(for='name') Restaurant Name:
+      input#name.form-control(type='text' placeholder='Restaurant Name' name='name' required='true' value=(undefined===restaurant  ? '' : restaurant.name))
+    div.form-group
+      label(for='entree_price') Entree Price (1-5):
+      input#entree_price.form-control(type='number' name='entree_price' min=1 max=5 value=(undefined===restaurant  ? '' : restaurant.entree_price) )
+    button.btn.btn-primary(type='submit') Submit
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

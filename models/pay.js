@@ -8,7 +8,6 @@ let PaySchema = new Schema(
         weekly_tips: {type: Number, required: true},
         weekly_hours: {type: Number, required: true},
         restaurant: {type: Schema.Types.ObjectId, ref: 'Restaurant', required: true},
-        user: {type: Schema.Types.ObjectId, ref: 'User', required: true}
     }
 );
 
