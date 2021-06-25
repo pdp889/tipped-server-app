@@ -460,3 +460,81 @@ exports.pay_create_post = (req,res, next) => {
         });
     }
 }
+
+exports.pay_list_get = (req,res, next) => {
+    const errors = validationResult(req);
+
+    let token = req.headers.authorization.split(' ')[1];
+    let decoded = decoder(token).sub;
+
+
+    Pay.find({ 'user': decoded}).then(userStubs => {
+        return res.json(userStubs);
+    })
+    .catch (err => res.json(err))
+}
+
+exports.pay_delete_post = (req,res, next) => {
+    
+    const errors = validationResult(req);
+
+    let token = req.headers.authorization.split(' ')[1];
+    let decoded = decoder(token).sub;
+
+
+    Pay.findById(req.body.payid).then(pay => {     
+        if (pay == null){
+            return res.json({message: 'no record'});
+        }
+        if (pay.user != decoded){
+            return res.json({message: 'delete failed, not a record from this user'});
+        }
+        Pay.findByIdAndRemove(req.body.payid).then(() => {
+            return res.json({message: 'delete successful'})
+        })
+    })
+    .catch (err => res.json(err))
+} 
+
+exports.pay_update_get = (req,res, next) => {
+    
+    const errors = validationResult(req);
+
+    Pay.findById(req.body.payid).then(pay => {     
+        if (pay == null){
+            return res.json({message: 'no record'});
+        }
+        return res.json(pay);
+    })
+    .catch (err => res.json(err))
+} 
+
+exports.pay_update_post = (req,res, next) => {
+    
+    const errors = validationResult(req);
+
+    let token = req.headers.authorization.split(' ')[1];
+    let decoded = decoder(token).sub;
+
+    let pay = new Pay({
+        hourly_pay: req.body.hourly_pay,
+        weekly_tips: req.body.weekly_tips,
+        weekly_hours: req.body.weekly_hours,
+        restaurant: req.body.restaurant,
+        user: decoded,
+        _id: req.body.payid
+    });
+
+    Pay.findById(req.body.payid).then(foundPay => {     
+        if (foundPay == null){
+            return res.json({message: 'no record'});
+        }
+        if (foundPay.user != decoded){
+            return res.json({message: 'update failed, not a record from this user'});
+        }
+        Pay.findByIdAndUpdate(req.body.payid, pay, {}).then(() => {
+            return res.json({message: 'update successful'})
+        })
+    })
+    .catch (err => res.json(err))
+} 

@@ -3,6 +3,7 @@ let router = express.Router();
 
 let restaurant_controller = require('../controllers/restaurantController');
 let pay_controller = require('../controllers/payController');
+let user_controller = require("../controllers/userController")
 
 // Pay Routes //
 router.get('/pay/create', pay_controller.pay_create_get);
@@ -23,5 +24,9 @@ router.get('/restaurant/:id/update', restaurant_controller.restaurant_update_get
 router.post('/restaurant/:id/update', restaurant_controller.restaurant_update_post);
 router.get('/restaurant/:id', restaurant_controller.restaurant_detail);
 router.get('/restaurant', restaurant_controller.restaurant_list);
+
+//User routes
+router.get('/user', user_controller.user_list);
+router.get('/user/:id', user_controller.user_detail);
 
 module.exports = router;

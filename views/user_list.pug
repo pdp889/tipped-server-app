@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  if currentUser
+      h1= title
+
+      ul
+        
+        each user in user_list
+          li
+            a(href=user.url) #{user.username}
+  else
+    a(href='/auth/login') Login 
+    a(href='auth/signup') Sign Up

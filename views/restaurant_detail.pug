@@ -10,6 +10,18 @@ block content
       p Zip: #{restaurant.zip_code}
       p Entree Price: #{restaurant.entree_price}
 
+    if restaurant_pays.length
+
+      div(style='margin-left:20px;margin-top:20px')
+
+        h4 Pay records
+
+        dl
+        each pay in restaurant_pays
+          dt
+            a(href=pay.url) #{pay.id}
+          dd 
+
     hr
     p
       a(href=restaurant.url+'/delete') Delete restaurant

@@ -25,7 +25,10 @@ router.get('/getTopFiveZips', passport.authenticate('jwt',{session: false}), pay
 router.get('/getAllPayByEntree', passport.authenticate('jwt',{session: false}), payAPI_controller.all_pay_by_entree);
 router.get('/getPayByZipAndEntree/:zip/:entree', passport.authenticate('jwt',{session: false}), payAPI_controller.pay_by_zip_and_entree);
 
-
+router.get('/allPayByUser', passport.authenticate('jwt',{session: false}), payAPI_controller.pay_list_get);
+router.get('/updatePay', passport.authenticate('jwt',{session: false}), payAPI_controller.pay_update_get);
+router.post('/updatePay', passport.authenticate('jwt',{session: false}), payAPI_controller.pay_update_post);
+router.post('/deletePay', passport.authenticate('jwt',{session: false}), payAPI_controller.pay_delete_post);
 
 // // Restaurant Routes //
 router.get('/createRestaurant', passport.authenticate('jwt',{session: false}), restaurantAPI_controller.restaurant_create_get);

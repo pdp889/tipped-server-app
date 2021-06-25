@@ -17,7 +17,10 @@ exports.restaurant_detail = function (req,res, next) {
         restaurant: function(callback){
             Restaurant.findById(req.params.id)
             .exec(callback);
-        }
+        },
+        restaurant_pays: function(callback) {
+            Pay.find({ 'restaurant': req.params.id }).exec(callback)
+          },
     }, function(err, results){
         if (err) {return next(err);}
         if (results.restaurant ==null){
@@ -25,7 +28,7 @@ exports.restaurant_detail = function (req,res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('restaurant_detail', {title: 'Restaurant Detail', restaurant: results.restaurant})
+        res.render('restaurant_detail', {title: 'Restaurant Detail', restaurant: results.restaurant, restaurant_pays: results.restaurant_pays})
     });
 };
 
