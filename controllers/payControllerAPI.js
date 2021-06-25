@@ -8,6 +8,7 @@ const { body,validationResult } = require('express-validator');
 let async =require('async');
 const passport = require('passport');
 require('../passportAPI.js');
+const decoder = require('jwt-decode');
 
 exports.pay_by_zip = (req,res, next) => {
     
@@ -429,11 +430,16 @@ exports.pay_create_post = (req,res, next) => {
         
     const errors = validationResult(req);
 
+    let token = req.headers.authorization.split(' ')[1];
+    let decoded = decoder(token).sub;
+
+
     let pay = new Pay({
         hourly_pay: req.body.hourly_pay,
         weekly_tips: req.body.weekly_tips,
         weekly_hours: req.body.weekly_hours,
         restaurant: req.body.restaurant,
+        user: decoded
     });
     if(!errors.isEmpty()){
         Restaurant.find()
