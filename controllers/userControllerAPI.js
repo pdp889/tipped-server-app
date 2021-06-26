@@ -8,6 +8,7 @@ const { body,validationResult } = require('express-validator');
 let async =require('async');
 const passport = require('passport');
 require('../passportAPI.js');
+const bcrypt = require('bcryptjs');
 
 
 function generateAccessToken(user){
@@ -30,7 +31,7 @@ exports.create_user_post = async function (req, res, next) {
     
     bcrypt.hash(password, 10, async (err, hashedPassword) => {
         if (err) {return next(err);}
-        const newUser = new User({ username, hashedPassword})
+        const newUser = new User({ username, "password": hashedPassword})
         await newUser.save()
         const token = generateAccessToken(newUser)
         res.json({token})
@@ -48,16 +49,16 @@ exports.log_in_post = async function (req, res, next) {
         return res.status(403).json({ error: 'username not in use'});
     } else {
 
-        bcrypt.compare(password, foundUser.password, (err, res) => {
-            if (res) {
-              // passwords match! log user in
-              const token = generateAccessToken(foundUser)
-              res.json({token})
-            } else {
-              // passwords do not match!
-              res.status(403).json({ error: 'password incorrect'})
-            }
-          })
+    bcrypt.compare(password, foundUser.password, (err, result) => {
+        if (result) {
+            // passwords match! log user in
+            const token = generateAccessToken(foundUser)
+            res.json({token})
+        } else {
+            // passwords do not match!
+            res.status(403).json({ error: 'password incorrect'})
+        }
+        })
 
     }
 }
