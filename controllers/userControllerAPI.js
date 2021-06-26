@@ -28,11 +28,17 @@ exports.create_user_post = async function (req, res, next) {
         return res.status(403).json({ error: 'username is already in use'});
     }
     
-    const newUser = new User({ username, password})
-    await newUser.save()
+    bcrypt.hash(password, 10, async (err, hashedPassword) => {
+        if (err) {return next(err);}
+        const newUser = new User({ username, hashedPassword})
+        await newUser.save()
+        const token = generateAccessToken(newUser)
+        res.json({token})
+      });
+    
 
-    const token = generateAccessToken(newUser)
-    res.json({token})
+    
+
 }
 
 exports.log_in_post = async function (req, res, next) {
@@ -41,11 +47,17 @@ exports.log_in_post = async function (req, res, next) {
     if (!foundUser) {
         return res.status(403).json({ error: 'username not in use'});
     } else {
-        if(foundUser.password != password){
-            res.status(403).json({ error: 'password incorrect'})
-        } else {
-            const token = generateAccessToken(foundUser)
-            res.json({token})
-        }
+
+        bcrypt.compare(password, foundUser.password, (err, res) => {
+            if (res) {
+              // passwords match! log user in
+              const token = generateAccessToken(foundUser)
+              res.json({token})
+            } else {
+              // passwords do not match!
+              res.status(403).json({ error: 'password incorrect'})
+            }
+          })
+
     }
 }
