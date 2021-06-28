@@ -12,13 +12,6 @@ let PaySchema = new Schema(
     }
 );
 
-//Virtual for pay info
-PaySchema
-.virtual('pay_info')
-.get(function () {
-    return 'hourly: ' + this.hourly_pay + "; weekly tips: " + this.weekly_tips + "; hours: " + this.weekly_hours;
-})
-
 //Virtual for pay url
 PaySchema
 .virtual('url')

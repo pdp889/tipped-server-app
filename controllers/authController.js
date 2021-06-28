@@ -33,6 +33,7 @@ exports.sign_up_post = async function (req, res, next) {
   
 
 }
+
 exports.log_in_get = function (req,res,next){
   res.render('sign_in');
 }

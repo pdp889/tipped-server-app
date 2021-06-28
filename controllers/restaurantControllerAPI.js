@@ -1,7 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const jwt = require('jsonwebtoken');
-let Pay = require('../models/pay');
+
 let Restaurant = require('../models/restaurant');
 let User = require('../models/user');
 const { body,validationResult } = require('express-validator');
@@ -9,10 +8,9 @@ let async =require('async');
 const passport = require('passport');
 require('../passportAPI.js');
 
-exports.restaurant_list = (req,res, next) => {
-    Restaurant.find()
-    .then(list => res.json(list))
-    .catch (err => res.json(err))
+exports.restaurant_list = async (req,res, next) => {
+    let list = await Restaurant.find();
+    res.json(list);
 };
 
 exports.restaurant_create_get = (req,res, next) => {

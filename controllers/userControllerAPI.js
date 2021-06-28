@@ -10,7 +10,7 @@ const passport = require('passport');
 require('../passportAPI.js');
 const bcrypt = require('bcryptjs');
 
-
+// helper method which generates access token when a user logs in
 function generateAccessToken(user){
     return jwt.sign({
         username: user.username,

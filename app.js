@@ -10,8 +10,8 @@ const Schema = mongoose.Schema;
 var cors = require('cors');
 const passport = require("passport");
 
-
-var indexRouter = require('./routes/index');
+//create routers
+let indexRouter = require('./routes/index');
 let databaseRouter = require('./routes/database');
 let apiRouter = require('./routes/api');
 let authRouter = require('./routes/auth');
@@ -49,6 +49,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+// add routers to app
 app.use('/', indexRouter);
 app.use('/database', databaseRouter);
 app.use('/api', apiRouter);

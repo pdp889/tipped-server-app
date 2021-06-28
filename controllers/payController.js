@@ -3,56 +3,25 @@ let Restaurant = require('../models/restaurant');
 const { body,validationResult } = require('express-validator');
 let async =require('async');
 
-exports.index = function (req, res){
-    async.parallel({
-        pay_count: function(callback){
-            Pay.countDocuments({}, callback);
-        },
-        restaurant_count: function(callback){
-            Restaurant.countDocuments({}, callback);
-        },
-    }, function(err, results){
-        res.render('index', {title: 'Database Home', error: err, data:results});
-    });
-}
+exports.pay_list = async function (req,res, next) {
 
-exports.pay_list = function (req,res, next) {
-
-    Pay.find()
-    .populate('restaurant')
-    .exec(function (err, list_pay) {
-        if (err) {return next(err);}
-        res.render('pay_list', {title: 'Pay List', pay_list: list_pay})
-    });
-
+    let list_pay = await Pay.find().populate('restaurant');
+    res.render('pay_list', {title: 'Pay List', pay_list: list_pay})
 };
 
-exports.pay_detail = function (req,res, next) {
-    async.parallel({
-        pay: function(callback){
-            Pay.findById(req.params.id)
-            .exec(callback);
-        }
-    }, function(err, results){
-        if (err) {return next(err);}
-        if (results.pay ==null){
-            let err = new Error('Pay not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('pay_detail', {title: 'Pay Detail', pay: results.pay})
-    });
+exports.pay_detail = async function (req,res, next) {
+    let pay = await Pay.findById(req.params.id);
+    if (pay ==null){
+        let err = new Error('Pay not found');
+        err.status = 404;
+        return next(err);
+    }
+    res.render('pay_detail', {title: 'Pay Detail', pay: pay});
 };
 
-exports.pay_create_get = function (req,res,next){
-    async.parallel({
-        restaurants: function(callback) {
-            Restaurant.find(callback);
-        },
-    }, function(err, results) {
-        if (err) {return next(err)};
-        res.render('pay_form', {title: 'Create Pay Record', restaurants: results.restaurants})
-    });
+exports.pay_create_get = async function (req,res,next){
+    let restaurants = await  Restaurant.find();
+    res.render('pay_form', {title: 'Create Pay Record', restaurants: restaurants})
 };
 
 exports.pay_create_post = [
@@ -95,51 +64,35 @@ exports.pay_create_post = [
 
 ]
 
-exports.pay_delete_get = function (req,res){
-    async.parallel({
-        pay: function(callback) {
-            Pay.findById(req.params.id).exec(callback)
-        }
-    }, function (err, results){
-        if (err) { return next(err); }
-        if (results.pay==null) { // No results.
-            res.redirect('/database/pay');
-        }
-        res.render('pay_delete', { title: 'Delete Pay', pay: results.pay})
-    });
+exports.pay_delete_get = async function (req,res){
+    let pay = await Pay.findById(req.params.id);
+    if (results.pay==null) { 
+        res.redirect('/database/pay');
+    }
+    res.render('pay_delete', { title: 'Delete Pay', pay: pay})
+
 }
 
-exports.pay_delete_post = function (req,res){
-    async.parallel({
-        pay: function(callback) {
-            Pay.findById(req.params.id).exec(callback)
-        }
-    }, function (err, results){
+exports.pay_delete_post = async function (req,res){
+    let pay = await Pay.findById(req.params.id);
+    if (!pay) {
+        return err;
+    }
+    Pay.findByIdAndRemove(req.body.payid, function deletePay(err){
         if (err) { return next(err); }
-        Pay.findByIdAndRemove(req.body.payid, function deletePay(err){
-            if (err) { return next(err); }
-            res.redirect('/database/pay');
-        })
-    });
+        res.redirect('/database/pay');
+    })
 }
 
-exports.pay_update_get = function (req,res, next){
-    async.parallel({
-        pay: function(callback) {
-            Pay.findById(req.params.id).populate('restaurant').exec(callback);
-        },
-        restaurants: function(callback) {
-            Restaurant.find(callback);
-        },
-        }, function(err, results) {
-            if (err) {return next(err)};
-            if (results.pay==null){
-                let err = new Error('pay not found');
-                err.status = 404;
-                return next(err);
-            }
-        res.render('pay_form', {title: 'Update Pay', pay:results.pay, restaurants:results.restaurants})    
-    });
+exports.pay_update_get = async function (req,res, next){
+    let [pay, restaurants] = await Promise.all([Pay.findById(req.params.id).populate('restaurant'), Restaurant.find()]);
+    if (pay == null){
+        let err = new Error('pay not found');
+        err.status = 404;
+        return next(err);
+    }
+    res.render('pay_form', {title: 'Update Pay', pay: pay, restaurants: restaurants})  
+
 }
 
 exports.pay_update_post = [

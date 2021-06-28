@@ -7,14 +7,13 @@ block content
     form(method='POST' action='')
       div.form-group
         label(for='zip_code') Zip:
-        select#zip.form-control(type='select', placeholder='select zip' name='zip_code' required='true' )
-          - zips.sort(function(a, b) {return (a < b) ? -1 : (a > b) ? 1 : 0;});
+        select#zip.form-control(type='select', placeholder='select zip' name='zip_code' required='true')
           for zip in zips 
             if restaurant
               option(
                 value=zip
                 selected=(
-                 zip==restaurant.zip
+                  zip==restaurant.zip_code.toString()
                 ) ? 'selected' : false 
               ) #{zip}
             else

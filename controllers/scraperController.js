@@ -12,7 +12,7 @@ const passport = require('passport');
 require('../passportAPI.js');
 const decoder = require('jwt-decode');
 
-// Helper methods for getAllJobs_get function
+// Helper methods for getAllJobs_get function 
 async function getZipCodeInfo (zip){
     
     let aggregate = await Restaurant.aggregate([{
@@ -32,7 +32,6 @@ async function getZipCodeInfo (zip){
     payArray.forEach(item => {
             
         if (item["zip_code"] - zip == 0){
-            console.log ('BOOM');
             let weeklyHours = 0;
             let weeklyComp = 0;
 
@@ -76,12 +75,9 @@ async function checkZipCodes (jobsList) {
 
     return finalList;
 };
+// End helper methods
 
 exports.getAllJobs_get = function (req, res, next) {
-    
-
-
-    
 
     (async function () { 
         let jobsList = await (async function () {
@@ -100,24 +96,14 @@ exports.getAllJobs_get = function (req, res, next) {
                 url = 'https://www.postjobfree.com' + url;
                 jobsList.push({title, restaurant, location, url}) 
             })
-        console.log('checkpoint 1'); 
-        console.log(jobsList);
-        let final = await checkZipCodes(jobsList);
-        console.log('checkpoint 2: before final log'); 
-        console.log(final);
-        console.log('checkpoint 3: after final log');    
+        let final = await checkZipCodes(jobsList);  
         return final;
         })();
         res.render('jobs', {title:'Live Job List', jobs: jobsList})
     })();
-
 }
 
 exports.getAllJobsAPI_get = function (req, res, next) {
-    
-
-
-    
 
     (async function () { 
         let jobsList = await (async function () {
@@ -136,12 +122,8 @@ exports.getAllJobsAPI_get = function (req, res, next) {
                 url = 'https://www.postjobfree.com' + url;
                 jobsList.push({title, restaurant, location, url}) 
             })
-        console.log('checkpoint 1'); 
-        console.log(jobsList);
-        let final = await checkZipCodes(jobsList);
-        console.log('checkpoint 2: before final log'); 
-        console.log(final);
-        console.log('checkpoint 3: after final log');    
+
+        let final = await checkZipCodes(jobsList);   
         return final;
         })();
         res.json({jobs: jobsList})
