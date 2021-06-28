@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config();require('jsonwebtoken');
+dotenv.config();
 let Pay = require('../models/pay');
 let Restaurant = require('../models/restaurant');
 const { body,validationResult } = require('express-validator');
