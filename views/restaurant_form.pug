@@ -6,8 +6,20 @@ block content
 
     form(method='POST' action='')
       div.form-group
-        label(for='zip_code') Zip Code :
-        input#zip_code.form-control(type='text' placeholder='00000' name='zip_code' required='true' value=(undefined===restaurant  ? '' : restaurant.zip_code) )
+        label(for='zip_code') Zip:
+        select#zip.form-control(type='select', placeholder='select zip' name='zip_code' required='true' )
+          - zips.sort(function(a, b) {return (a < b) ? -1 : (a > b) ? 1 : 0;});
+          for zip in zips 
+            if restaurant
+              option(
+                value=zip
+                selected=(
+                 zip==restaurant.zip
+                ) ? 'selected' : false 
+              ) #{zip}
+            else
+              option(value=zip) #{zip}
+      div.form-group
         label(for='name') Restaurant Name:
         input#name.form-control(type='text' placeholder='Restaurant Name' name='name' required='true' value=(undefined===restaurant  ? '' : restaurant.name))
       div.form-group
