@@ -1,1 +1,1 @@
-simple app for servers
+#This is the backend for the tipped-server app. 
