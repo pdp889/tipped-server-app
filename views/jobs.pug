@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  if currentUser
+    h1=title
+
+    for job in jobs
+      div(style='margin-left:20px;margin-top:20px;border-style:solid')
+          p Job Title: #{job.title}
+          p Restaurant: #{job.restaurant}
+          p Location: #{job.location}
+          a(href=job.url) Description and Apply
+          if job.average != 'unknown'
+            p based on our records, the average pay in this zip code is #{job.average}
+  else
+    a(href='/auth/login') Login 
+    a(href='auth/signup') Sign Up

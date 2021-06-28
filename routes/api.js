@@ -14,6 +14,8 @@ require('../passportAPI.js');
 let restaurantAPI_controller = require('../controllers/restaurantControllerAPI');
 let payAPI_controller = require('../controllers/payControllerAPI');
 let userAPI_controller = require('../controllers/userControllerAPI')
+let scraper_controller = require('../controllers/scraperController');
+
 
 // Pay Routes //
 router.get('/createPay', passport.authenticate('jwt',{session: false}), payAPI_controller.pay_create_get);
@@ -39,5 +41,8 @@ router.get('/getRestaurants', passport.authenticate('jwt',{session: false}), res
 router.post('/createNewUser', userAPI_controller.create_user_post);
 router.get('/createNewUser', userAPI_controller.create_user_get);
 router.post('/login', userAPI_controller.log_in_post);
+
+//Scraper Routes//
+router.get('/scraper', passport.authenticate('jwt',{session: false}), scraper_controller.getAllJobsAPI_get);
 
 module.exports = router;

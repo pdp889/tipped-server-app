@@ -15,6 +15,7 @@ var indexRouter = require('./routes/index');
 let databaseRouter = require('./routes/database');
 let apiRouter = require('./routes/api');
 let authRouter = require('./routes/auth');
+let scraperRouter = require('./routes/scraper');
 
 
 var app = express()
@@ -52,6 +53,7 @@ app.use('/', indexRouter);
 app.use('/database', databaseRouter);
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
+app.use ('/scraper', scraperRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
