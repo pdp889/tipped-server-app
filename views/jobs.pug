@@ -1,17 +1,16 @@
 extends layout
-
-block content
+block primary
   if currentUser
     h1=title
-
     for job in jobs
-      div(style='margin-left:20px;margin-top:20px;border-style:solid')
-          p Job Title: #{job.title}
-          p Restaurant: #{job.restaurant}
-          p Location: #{job.location}
-          a(href=job.url) Description and Apply
-          if job.average != 'unknown'
-            p based on our records, the average pay in this zip code is #{job.average}
+      div(class="card" style="padding: 10px")
+          h4(class = "card-title") #{job.title}
+          div(class="card-body")
+            p #{job.restaurant}
+            p Zip: #{job.location}
+            if job.average != 'unknown'
+              p Based on our records, the average pay in this zip code is $#{job.average}
+            a(class="btn btn-primary" href=job.url) Description and Apply
   else
     a(href='/auth/login') Login 
     a(href='auth/signup') Sign Up

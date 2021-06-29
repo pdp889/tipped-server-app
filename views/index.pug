@@ -1,30 +1,11 @@
-extends layout
-
-block content
-  if currentUser
-    h1 Welcome back #{currentUser.username}
-    a(href='/auth/log-out') log out
-
-    div(class='container-fluid')
-      div(class='row')
-        div(class='col-sm-2')
-          block sidebar
-            ul(class='sidebar-nav')
-              li
-                a(href='/database/pay') All Pays
-              li
-                a(href='/database/restaurant') All Restaurants
-              li
-                a(href='/database/user') All Users
-              li
-                a(href='/scraper') All Jobs
-              hr
-              li
-                a(href='/database/pay/create') Create new pay
-              li
-                a(href='/database/restaurant/create') Create new restaurant
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up
-  if error
-    p Error getting dynamic content;
+if currentUser
+  block sidebar
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js", integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV", crossorigin="anonymous")
+    link(rel="stylesheet" href="/css/bootstrap.min.css")
+    nav(class="nav flex-column border-right")
+        a(class="nav-link active" href='/database/pay') All Pays
+        a(class="nav-link active" href='/database/restaurant') All Restaurants
+        a(class="nav-link active" href='/database/user') All Users
+        a(class="nav-link active" href='/scraper') All Jobs
+        a(class="nav-link active" href='/database/pay/create') Create new pay
+        a(class="nav-link active" href='/database/restaurant/create') Create new restaurant

@@ -1,25 +1,15 @@
 extends layout
 
-block content
+block primary
   if currentUser
-    h1 User: #{user.id}
-
-    div(style='margin-left:20px;margin-top:20px')
-
-      p Name: #{user.username}
-
-
-    if user_pays.length
-
-      div(style='margin-left:20px;margin-top:20px')
-
-        h4 Pay records
-
-        dl
-        each pay in user_pays
-          dt
-            a(href=pay.url) #{pay.id}
-          dd 
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up
+    div(class='card' style='padding: 10px') 
+      h2(class='card-title') User: #{user.id}
+      div(class='card-body')
+        p Name: #{user.username}
+        if user_pays.length
+            h4 Pay records
+            dl
+            each pay in user_pays
+              dt
+                a(href=pay.url) #{pay.id}
+              dd

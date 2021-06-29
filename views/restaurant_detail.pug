@@ -1,32 +1,20 @@
 extends layout
 
-block content
+block primary
   if currentUser
-    h1 Restaurant: #{restaurant.id}
-
-    div(style='margin-left:20px;margin-top:20px')
-
-      p Name: #{restaurant.name}
-      p Zip: #{restaurant.zip_code}
-      p Entree Price: #{restaurant.entree_price}
-
-    if restaurant_pays.length
-
-      div(style='margin-left:20px;margin-top:20px')
-
-        h4 Pay records
-
-        dl
-        each pay in restaurant_pays
-          dt
-            a(href=pay.url) #{pay.id}
-          dd 
-
-    hr
-    p
-      a(href=restaurant.url+'/delete') Delete restaurant
-    p
-      a(href=restaurant.url+'/update') Update restaurant
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up
+    div(class='card' style="padding:10px")
+      h2(class='card-title') Restaurant id: #{restaurant.id}
+      div(class='card-body')
+        p Name: #{restaurant.name}
+        p Zip: #{restaurant.zip_code}
+        p Entree Price: #{restaurant.entree_price}
+        if restaurant_pays.length
+            h4 Pay records
+            dl
+            each pay in restaurant_pays
+              dt
+                a(href=pay.url) #{pay.id}
+              dd 
+      div(class='card-footer')
+        a(class="btn btn-primary" href=restaurant.url+'/delete' style='margin-right: 20px') Delete restaurant
+        a(class="btn btn-primary" href=restaurant.url+'/update') Update restaurant

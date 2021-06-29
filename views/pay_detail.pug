@@ -1,22 +1,17 @@
 extends layout
 
-block content
+block primary
   if currentUser  
-    h1 Pay id: #{pay.id}
+    
 
-    div(style='margin-left:20px;margin-top:20px')
-
-      p  Hourly :  #{pay.hourly_pay}
-      p  Weekly Tips: #{pay.weekly_tips}
-      p  Weekly Hours: #{pay.weekly_hours}
-      p  Restaurant: #{pay.restaurant}
-      p  User: #{pay.user}
-      
-    hr
-    p
-      a(href=pay.url+'/delete') Delete pay
-    p
-      a(href=pay.url+'/update') Update pay
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up 
+    div(class='card' style="padding:10px")
+      h2(class='card-title') Pay id: #{pay.id}
+      div(class='card-body')
+        p  Hourly :  #{pay.hourly_pay}
+        p  Weekly Tips: #{pay.weekly_tips}
+        p  Weekly Hours: #{pay.weekly_hours}
+        p  Restaurant: #{pay.restaurant}
+        p  User: #{pay.user}
+      div(class='card-footer')
+        a(class="btn btn-primary" href=pay.url+'/delete' style='margin-right: 20px') Delete pay
+        a(class="btn btn-primary" href=pay.url+'/update') Update pay

@@ -1,0 +1,8 @@
+extends layout
+block primary
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js", integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV", crossorigin="anonymous")
+    link(rel="stylesheet" href="/css/bootstrap.min.css")
+    div(class="d-flex flex-row bg-primary")
+        a(class='p-2 text-white text-decoration-none' href='/auth/login') Login
+        a(class='p-2 text-white text-decoration-none'  href='auth/signup') Sign Up
+    p(class="text-danger") There was an incorrect username or password. Please try logging in again or sign up for a new account. 

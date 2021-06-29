@@ -66,7 +66,7 @@ exports.pay_create_post = [
 
 exports.pay_delete_get = async function (req,res){
     let pay = await Pay.findById(req.params.id);
-    if (results.pay==null) { 
+    if (pay==null) { 
         res.redirect('/database/pay');
     }
     res.render('pay_delete', { title: 'Delete Pay', pay: pay})

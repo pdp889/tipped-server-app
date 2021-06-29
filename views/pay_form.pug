@@ -1,21 +1,20 @@
 extends layout
 
-block content
+block primary
   if currentUser  
     h1= title
     form(method='POST' action='')
-      div.form-group
-        label(for='user') User
-        input#user.form-control(name='user' required='true' value=currentUser.id readonly)
-        label(for='hourly_pay') Hourly:
-        input#hourly_pay.form-control(type='number', placeholder='2.13' name='hourly_pay' required='true' value=(undefined===pay ? '' : pay.hourly_pay) )
-        label(for='weekly_tips') Weekly Tips:
-        input#weekly_tips.form-control(type='number', placeholder='500' name='weekly_tips' required='true' value=(undefined===pay ? '' : pay.weekly_tips) )
+      div(class="form-group w-50")
+        label(for='user' class="form-label") User
+        input#user( class="form-control" name='user' required='true' value=currentUser.id readonly)
+        label(for='hourly_pay' class="form-label") Hourly:
+        input#hourly_pay(class="form-control" type='number' name='hourly_pay' required='true' value=(undefined===pay ? '' : pay.hourly_pay) )
+        label(for='weekly_tips' class="form-label") Weekly Tips:
+        input#weekly_tips(class="form-control" type='number' name='weekly_tips' required='true' value=(undefined===pay ? '' : pay.weekly_tips) )
         label(for='weekly_hours') Weekly Hours:
-        input#weekly_hours.form-control(type='number', placeholder='40' name='weekly_hours' required='true' value=(undefined===pay ? '' : pay.weekly_hours) )
-      div.form-group
-        label(for='restaurant') Restaurant:
-        select#restaurant.form-control(type='select', placeholder='select restaurant' name='restaurant' required='true' )
+        input#weekly_hours(class="form-control" type='number' name='weekly_hours' required='true' value=(undefined===pay ? '' : pay.weekly_hours) )
+        label(for='restaurant' class="form-label") Restaurant:
+        select#restaurant( class="form-select" type='select' name='restaurant' required='true' )
           - restaurants.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
           for restaurant in restaurants 
             if pay
@@ -28,11 +27,8 @@ block content
               ) #{restaurant.name}
             else
               option(value=restaurant._id) #{restaurant.name}
-      button.btn.btn-primary(type='submit') Submit
+      button( class="btn btn-primary" type='submit') Submit
     if errors
       ul
         for error in errors
           li!= error.msg
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up

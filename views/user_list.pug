@@ -1,14 +1,8 @@
 extends layout
 
-block content
+block primary
   if currentUser
       h1= title
-
-      ul
-        
-        each user in user_list
-          li
-            a(href=user.url) #{user.username}
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up
+      each user in user_list
+          div
+            a(href=user.url class='text-decoration-none') #{user.username}

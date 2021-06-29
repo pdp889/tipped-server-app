@@ -1,13 +1,13 @@
 extends layout
 
-block content
+block primary
   if currentUser
     h1=title
 
     form(method='POST' action='')
-      div.form-group
-        label(for='zip_code') Zip:
-        select#zip.form-control(type='select', placeholder='select zip' name='zip_code' required='true')
+      div(class="form-group w-50")
+        label(for='zip_code' class="form-label") Zip:
+        select#zip(class="form-select" type='select' name='zip_code' required='true')
           for zip in zips 
             if restaurant
               option(
@@ -18,17 +18,12 @@ block content
               ) #{zip}
             else
               option(value=zip) #{zip}
-      div.form-group
-        label(for='name') Restaurant Name:
-        input#name.form-control(type='text' placeholder='Restaurant Name' name='name' required='true' value=(undefined===restaurant  ? '' : restaurant.name))
-      div.form-group
-        label(for='entree_price') Entree Price (1-5):
-        input#entree_price.form-control(type='number' name='entree_price' min=1 max=5 value=(undefined===restaurant  ? '' : restaurant.entree_price) )
-      button.btn.btn-primary(type='submit') Submit
+        label(for='name' class="form-label") Restaurant Name:
+        input#name.form( class="form-control" type='text'  name='name' required='true' value=(undefined===restaurant  ? '' : restaurant.name))
+        label(for='entree_price' class="form-label") Entree Price (1-5):
+        input#entree_price( class="form-control" type='number' name='entree_price' min=1 max=5 value=(undefined===restaurant  ? '' : restaurant.entree_price) )
+      button( class="btn btn-primary" type='submit') Submit
     if errors
       ul
         for error in errors
           li!= error.msg
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up

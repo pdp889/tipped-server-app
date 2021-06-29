@@ -1,16 +1,8 @@
 extends layout
 
-block content
+block primary
   if currentUser
       h1= title
-
-      ul
-        
-        each restaurant in restaurant_list
-          li
-            a(href=restaurant.url) #{restaurant.name}
-            p  Zip :   #{restaurant.zip_code}
-            p  Entree Price: #{restaurant.entree_price}
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up
+      each restaurant in restaurant_list
+        div
+          a(href=restaurant.url class='text-decoration-none') #{restaurant.name} | #{restaurant.zip_code}

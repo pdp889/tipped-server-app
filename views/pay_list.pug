@@ -1,15 +1,9 @@
 extends layout
 
-block content
+block primary
   if currentUser
     h1= title
-
-    ul
-      
-      each pay in pay_list
-        li
-          a(href=pay.url) #{pay.id}
-  else
-    a(href='/auth/login') Login 
-    a(href='auth/signup') Sign Up  
+    each pay in pay_list
+      div
+        a(href=pay.url class='text-decoration-none') #{pay.id}
 

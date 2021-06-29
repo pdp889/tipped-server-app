@@ -1,16 +1,19 @@
 extends layout
-block content
-    div.text-center
+
+block primary
+    div(style='padding: 25px')
         form( method="POST" action="")
             #error
                 if error
                     p.text-danger Error!!!
 
             h1(class=h1Classes) Please sign in
-
-            label( for="username" ) Username
-            input(type="text" name="username" id="username" placeholder="username" required)
-
-            label(for="inputPassword" class="sr-only") Password
-            input(type="password" name="password" id="password" placeholder="Password" required)
-            button Sign in
+            div(class="form-group w-500")
+                div
+                    label( for="username" style="margin-right: 5px") Username
+                    input(type="text" name="username" id="username" required)
+                div
+                    label(for="inputPassword" style="margin-right: 11px") Password
+                    input(type="password" name="password" id="password" required)
+            button(class="btn btn-primary") Sign in
+block sidebar
